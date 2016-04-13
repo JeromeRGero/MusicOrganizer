@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A class to hold details of audio tracks.
@@ -15,6 +16,8 @@ public class MusicOrganizer
     private MusicPlayer player;
     // A reader that can read music files and load them as tracks.
     private TrackReader reader;
+    
+    private Random randomGen;
 
     /**
      * Create a MusicOrganizer
@@ -75,9 +78,11 @@ public class MusicOrganizer
      */
     public void listTrack(int index)
     {
-        System.out.print("Track " + index + ": ");
-        Track track = tracks.get(index);
-        System.out.println(track.getDetails());
+        if(validIndex(index)){
+            System.out.print("Track " + index + ": ");
+            Track track = tracks.get(index);
+            System.out.println(track.getDetails());
+        }
     }
     
     /**
@@ -91,6 +96,15 @@ public class MusicOrganizer
             System.out.println(track.getDetails());
         }
         System.out.println();
+    }
+    
+    public void listAllFiles(){
+        int x = 0;
+        for(Track track : tracks){
+            ++x;
+            System.out.println("Track " + x + " is " + track.getDetails());
+        }
+        
     }
     
     /**
@@ -112,7 +126,7 @@ public class MusicOrganizer
      */
     public void removeTrack(int index)
     {
-        if(indexValid(index)) {
+        if(validIndex(index)) {
             tracks.remove(index);
         }
     }
@@ -169,5 +183,29 @@ public class MusicOrganizer
         for(Track track : tempTracks) {
             addTrack(track);
         }
+    }
+    
+    public void checkIndex(int choi)
+    {
+        if(choi > tracks.size() || choi < 0)
+        {
+            System.out.println("You are out of bounds! Valid range is " + tracks.size());
+        }
+    }
+    
+    public boolean validIndex(int choo)
+    {
+        if(choo <= tracks.size()&& choo >= 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    public void randomSong(){
+        int song;
+        song = randomGen.nextInt(tracks.size()) - 1;
+        player.startPlaying(tracks.get(song).getFilename());
     }
 }
